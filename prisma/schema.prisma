@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model admin {
+  id_admin       Int     @id
+  nama_admin     String? @db.Char(255)
+  username_admin String? @db.Char(255)
+  password_admin String? @db.Char(10)
+  role           String? @db.Char(255)
+}
+
+model barang {
+  id_barang    Int     @id
+  nama_barang  String? @db.Char(255)
+  harga_barang Int?
+  stok_barang  Int?
+}
+
+model kasir {
+  id_kasir       Int     @id
+  nama_kasir     String? @db.Char(225)
+  username_kasir String? @db.Char(225)
+  password_kasir String? @db.Char(10)
+  role           String? @db.Char(225)
+}
+
+model transaksi {
+  id_transaksi Int        @id(map: "transaks_pkey")
+  tanggal      DateTime[] @db.Timestamp
+  id_kasir     Int?
+}
