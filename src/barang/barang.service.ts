@@ -20,12 +20,12 @@ export class barangService {
             data, 
         })
     }
-
-    async updateBarang(id_barang:number, data:barang):Promise<barang>{
-        return this.prisma.barang.update({
-            where: {id_barang:Number(id_barang)},
-            data:{nama_barang: data.nama_barang, harga_barang:data.harga_barang, stok_barang:data.stok_barang}
-        })
+ 
+    async updateBarang(id_barang: number, data: barang): Promise<barang> {
+    return this.prisma.barang.update({
+        where: {id_barang:Number(id_barang)},
+        data:{nama_barang: data.nama_barang, harga_barang:data.harga_barang, stok_barang:data.stok_barang}
+        });
     }
 
 

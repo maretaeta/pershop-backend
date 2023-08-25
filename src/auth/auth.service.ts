@@ -5,7 +5,8 @@ import { JwtService } from "@nestjs/jwt";
 import { loginDto } from "./dto/login-user.dto";
 import * as bcrypt from "bcrypt"
 import { RegisterUserDto } from "./dto/register-user.dto";
-import { Users } from "src/users/users.model";
+import { Users   } from "src/users/users.model";
+import { UserRole } from "@prisma/client";
 
 @Injectable()
 export class AuthService {
@@ -23,9 +24,10 @@ export class AuthService {
         });
 
 
-        if(!users){
-            throw new NotFoundException('user not found')
-        }
+        if (!users) {
+    throw new NotFoundException('User not found');
+}
+
 
          const validatePassword = await bcrypt.compare(password, users.password);
 
@@ -33,7 +35,8 @@ export class AuthService {
             throw new NotFoundException('Invalid Password');
         }
 
-        const token = this.jwtService.sign({ username }, { expiresIn: '1h' });
+        // const token = this.jwtService.sign({ username }, { expiresIn: '1h' });
+        const token = this.jwtService.sign({ username: users.username, role: users.role }, { expiresIn: '3h' });
 
         return {
             users,
@@ -42,15 +45,23 @@ export class AuthService {
     }
 
     async register(createDto: RegisterUserDto): Promise<any> {
+
+         const { role, ...userDto } = createDto;
+
+    if (![UserRole.ADMIN, UserRole.KASIR].includes(role)) {
+        throw new NotFoundException('Invalid role');
+    }
+
         const createUsers = new Users();
-        createUsers.nama = createDto.nama;
-        createUsers.username = createDto.username;
-        createUsers.password = await bcrypt.hash(createDto.password, 10);
+        createUsers.nama =  userDto.nama;
+        createUsers.username = userDto.username;
+        createUsers.password = await bcrypt.hash(userDto.password, 10);
+        createUsers.role = createDto.role;
 
         const user = await this.usersService.createUser(createUsers);
 
         return {
-            user
+            user,
         };
     }
 }

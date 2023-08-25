@@ -1,27 +1,34 @@
-import { Get, Req, Res } from "@nestjs/common";
+import { Get, SetMetadata, UseGuards } from "@nestjs/common";
 import { Controller } from "@nestjs/common";
 import { UserService } from "./users.service";
-import { Request, Response } from 'express';
+// import { Request, Response } from 'express';
+import { UserRole } from "@prisma/client";
+import { RolesGuard  } from "./users.guard";
+import { JwtAuthGuard } from "src/auth/auth.guard";
 
 
 @Controller('api/v1/users')
 export class UserController{
      constructor(private readonly usersService: UserService){}
      
-     @Get()
-     async getAllUsers(@Req() request: Request, @Res() response: Response):Promise<any>{
-        try{
+    @Get()
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @SetMetadata('roles', [UserRole.ADMIN]) 
+    async getAllUsers(): Promise<any> {
+        try {
             const result = await this.usersService.getAllUsers();
-            return response.status(200).json({
+            return {
                 status: 'Okay',
                 message: 'Successfully fetch data',
-                result: result
-            })
-        }catch(error){
-            return response.status(500).json({
-                status: 'Okay',
-                messege: 'Internal Server Error'
-            })
+                data: result,
+            };
+        } catch (error) {
+            return {
+                status: 'Error',
+                messege: 'Internal Server Error',
+                error: error.message,
+            };
         }
-     }
+    }
 }
+

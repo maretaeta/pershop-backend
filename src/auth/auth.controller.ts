@@ -14,31 +14,30 @@ export class AuthController{
 
     @Post('login')
     async login(@Req() request: Request, @Res() response: Response, @Body() loginDto: loginDto): Promise<any> {
-        // try {
-            console.log('Register endpoint called.');
+        try {
             const result = await this.authService.
             login(loginDto);
+            
                 return response.status(200).json({
                     status: 'Okay',
                     message: 'Successfully Login',
                     result: result
 
                 })
-        // }catch(err){
-        //     return response.status(500).json({
-        //         status:'Error',
-        //         message: 'Internal Service Error',
-        //         error: err.message, 
-        //     })
+        }catch(err){
+            return response.status(500).json({
+                status:'Error',
+                message: 'Internal Service Error',
+                error: err.message, 
+            })
 
-        // }
+        }
     }
 
 
     @Post('register')
     async register(@Req() request: Request, @Res() response: Response, @Body() registerDto: RegisterUserDto):Promise<any>{
-        // try{
-            console.log('Register endpoint called.');
+        try{
             const result = await this.authService.register(registerDto);
             return response.status(200).json({
                 status: 'Okay',
@@ -46,13 +45,13 @@ export class AuthController{
                 result: result
 
             })
-        // }catch(err){
-        //     return response.status(500).json({
-        //         status:'Error',
-        //         message: 'Internal Service Error',
-        //     })
+        }catch(err){
+            return response.status(500).json({
+                status:'Error',
+                message: 'Internal Service Error',
+            })
 
-        // }
+        }
     }
 
 }

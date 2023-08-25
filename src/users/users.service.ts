@@ -24,7 +24,7 @@ export class UserService{
         }
 
         return this.prisma.users.create({
-            data
+            data,
         })
     }
 

@@ -7,39 +7,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model admin {
-  id_admin       Int     @id
-  nama_admin     String? @db.VarChar(225)
-  username_admin String? @db.VarChar(225)
-  password_admin String? @db.VarChar(20)
-  role           String? @db.VarChar(225)
-}
-
 model barang {
-  id_barang    Int     @id @default(autoincrement())
-  nama_barang  String? @db.VarChar(255)
-  harga_barang Int?
-  stok_barang  Int?
-}
-
-model kasir {
-  id_kasir       Int     @id
-  nama_kasir     String? @db.VarChar(225)
-  username_kasir String? @db.VarChar(225)
-  password_kasir String? @db.VarChar(20)
-  role           String? @db.VarChar(225)
+  id_barang        Int                @id @default(autoincrement())
+  nama_barang      String?            @db.VarChar(255)
+  harga_barang     Int?
+  stok_barang      Int?
+  barang_transaksi barang_transaksi[]
 }
 
 model transaksi {
-  id_transaksi Int        @id(map: "transaks_pkey")
-  tanggal      DateTime[] @db.Timestamp
-  id_kasir     Int?
+  id_transaksi     Int                @id(map: "transaks_pkey")
+  tanggal          DateTime[]         @db.Timestamp
+  userId           Int
+  user             users              @relation(fields: [userId], references: [id_users])
+  totalAmount      Float
+  barang_transaksi barang_transaksi[]
+}
+
+enum UserRole {
+  ADMIN
+  KASIR
 }
 
 model users {
-  id_users Int     @id @default(autoincrement())
-  nama     String? @db.VarChar(225)
-  username String? @db.VarChar(225)
-  password String?
-  role     String? @db.VarChar(225)
+  id_users  Int         @id @default(autoincrement())
+  nama      String?     @db.VarChar(225)
+  username  String?     @db.VarChar(225)
+  password  String?
+  role      UserRole
+  transaksi transaksi[]
+}
+
+model barang_transaksi {
+  id_barang_transaksi Int       @id @default(autoincrement())
+  id_barang           Int
+  id_transaksi        Int
+  subtotal            Float
+  barang              barang    @relation(fields: [id_barang], references: [id_barang])
+  transaksi           transaksi @relation(fields: [id_transaksi], references: [id_transaksi])
 }
