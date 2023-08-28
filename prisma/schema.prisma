@@ -16,7 +16,7 @@ model barang {
 }
 
 model transaksi {
-  id_transaksi     Int                @id(map: "transaks_pkey")
+  id_transaksi     Int                @id @default(autoincrement())
   tanggal          DateTime[]         @db.Timestamp
   userId           Int
   user             users              @relation(fields: [userId], references: [id_users])

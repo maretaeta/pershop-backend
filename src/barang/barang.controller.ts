@@ -13,7 +13,7 @@ export class BarangController{
     constructor(private readonly barangService: barangService){}
 
     @Get()
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     async getAllBarang():Promise<barang[]>{
         return this.barangService.getAllBarang()
     }
