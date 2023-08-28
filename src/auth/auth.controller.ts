@@ -4,15 +4,40 @@ import { AuthService } from "./auth.service";
 import { loginDto } from "./dto/login-user.dto";
 import { Request, Response } from 'express';
 import { RegisterUserDto } from "./dto/register-user.dto";
+import { ApiTags, ApiBody, ApiResponse } from "@nestjs/swagger/dist/decorators";
 
-
-
+@ApiTags('User')
 @Controller('api/v1/auth')
 export class AuthController{
 
     constructor(private readonly authService:AuthService){}
 
     @Post('login')
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                username: {
+                    type: 'string',
+                    example: 'gege',
+                },
+                password: {
+                    type: 'string',
+                    example: 'gege123'
+                }
+            }
+        }
+    })
+    @ApiResponse({
+        status: 200,
+        description:'Successfully Login'
+    })
+
+     @ApiResponse({
+        status: 500,
+        description:'Internal server error'
+    })
+
     async login(@Req() request: Request, @Res() response: Response, @Body() loginDto: loginDto): Promise<any> {
         try {
             const result = await this.authService.
@@ -36,6 +61,38 @@ export class AuthController{
 
 
     @Post('register')
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                nama:{
+                    type: 'string',
+                    example: 'gege',
+                },
+                username: {
+                    type: 'string',
+                    example: 'gege',
+                },
+                password: {
+                    type: 'string',
+                    example: 'gege123'
+                },
+                role:{
+                    type: 'enum',
+                    example: 'KASIR'
+                }
+            }
+        }
+    })
+    @ApiResponse({
+        status: 200,
+        description:'Successfully Register'
+    })
+    
+     @ApiResponse({
+        status: 500,
+        description:'Internal server error'
+    })
     async register(@Req() request: Request, @Res() response: Response, @Body() registerDto: RegisterUserDto):Promise<any>{
         try{
             const result = await this.authService.register(registerDto);
