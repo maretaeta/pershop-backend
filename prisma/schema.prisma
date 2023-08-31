@@ -17,11 +17,11 @@ model barang {
 
 model transaksi {
   id_transaksi     Int                @id @default(autoincrement())
-  tanggal          DateTime[]         @db.Timestamp
   userId           Int
   user             users              @relation(fields: [userId], references: [id_users])
-  totalAmount      Float
+  totalHarga       Int
   barang_transaksi barang_transaksi[]
+  createdAt        DateTime           @default(now())
 }
 
 enum UserRole {
@@ -42,7 +42,8 @@ model barang_transaksi {
   id_barang_transaksi Int       @id @default(autoincrement())
   id_barang           Int
   id_transaksi        Int
-  subtotal            Float
+  jumlah_barang       Int
+  subtotal            Int
   barang              barang    @relation(fields: [id_barang], references: [id_barang])
   transaksi           transaksi @relation(fields: [id_transaksi], references: [id_transaksi])
 }
