@@ -1,6 +1,8 @@
 import { UserRole } from '@prisma/client';
 import { IsString, Length } from 'class-validator';
 
+
+
 export class RegisterUserDto {
     @IsString()
     @Length(5, 10)

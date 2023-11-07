@@ -12,6 +12,7 @@ model barang {
   nama_barang      String?            @db.VarChar(255)
   harga_barang     Int?
   stok_barang      Int?
+  image            String?
   barang_transaksi barang_transaksi[]
 }
 

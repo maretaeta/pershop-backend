@@ -5,5 +5,6 @@ export class barang implements Prisma.barangCreateInput{
     nama_barang?: string;
     harga_barang?: number;
     stok_barang?: number;
+    image?: string;
 }
 

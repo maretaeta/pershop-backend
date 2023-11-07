@@ -23,17 +23,28 @@ export class barangService {
  
     async updateBarang(id_barang: number, data: barang): Promise<barang> {
     return this.prisma.barang.update({
-        where: {id_barang:Number(id_barang)},
-        data:{nama_barang: data.nama_barang, harga_barang:data.harga_barang, stok_barang:data.stok_barang}
+        where: {
+            id_barang:Number(id_barang)
+        },
+        data:{  
+            nama_barang: data.nama_barang, 
+            harga_barang:data.harga_barang, 
+            stok_barang:data.stok_barang,
+            image: data.image
+            }
         });
     }
 
 
-    async deleteBarang(id_barang:number):Promise<barang>{
-        return this.prisma.barang.delete({
-            where:{id_barang:Number(id_barang)},
-       
-        })
-    }
+  async deleteBarang(id_barang: number): Promise<barang> {
+    await this.prisma.barang_transaksi.deleteMany({
+        where: { id_barang: Number(id_barang) },
+    });
+
+    return this.prisma.barang.delete({
+        where: { id_barang: Number(id_barang) },
+    });
+}
+
 }
 

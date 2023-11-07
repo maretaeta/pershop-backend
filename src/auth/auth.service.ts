@@ -19,23 +19,24 @@ export class AuthService {
     async login(loginDto: loginDto):Promise<any>{
         const {username, password} = loginDto;
 
-       const users = await this.prismaService.users.findFirst({
-            where: { username }
-        });
+    const users = await this.prismaService.users.findFirst({
+        where: {
+            username: { equals: username }
+        }
+    });
 
 
         if (!users) {
-    throw new NotFoundException('User not found');
-}
+            throw new NotFoundException('User not found');
+        }
 
 
-         const validatePassword = await bcrypt.compare(password, users.password);
+        const validatePassword = await bcrypt.compare(password, users.password);
 
         if (!validatePassword) {
             throw new NotFoundException('Invalid Password');
         }
 
-        // const token = this.jwtService.sign({ username }, { expiresIn: '1h' });
         const token = this.jwtService.sign({ username: users.username, role: users.role }, { expiresIn: '3h' });
 
         return {
@@ -46,17 +47,20 @@ export class AuthService {
 
     async register(createDto: RegisterUserDto): Promise<any> {
 
-         const { role, ...userDto } = createDto;
+        //  const { role, ...userDto } = createDto;
 
-    if (![UserRole.ADMIN, UserRole.KASIR].includes(role)) {
-        throw new NotFoundException('Invalid role');
-    }
+        // if (![UserRole.ADMIN, UserRole.KASIR].includes(role)) {
+        //     throw new NotFoundException('Invalid role');
+        // }
+
+        
+        const userDto = { ...createDto, role: UserRole.KASIR };
 
         const createUsers = new Users();
         createUsers.nama =  userDto.nama;
         createUsers.username = userDto.username;
         createUsers.password = await bcrypt.hash(userDto.password, 10);
-        createUsers.role = createDto.role;
+        createUsers.role =  userDto.role
 
         const user = await this.usersService.createUser(createUsers);
 
