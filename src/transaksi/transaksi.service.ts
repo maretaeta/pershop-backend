@@ -19,19 +19,19 @@ export class TransaksiService {
     });
   }
 
-  async getTransaksi(id_transaksi: number): Promise<transaksi | null> {
-    return this.prisma.transaksi.findUnique({
-      where: { id_transaksi: Number(id_transaksi) },
-      include: {
-        user: true,
-        barang_transaksi: {
-          include: {
-            barang: true,
-          },
-        },
-      },
-    });
-  }
+  // async getTransaksi(id_transaksi: number): Promise<transaksi | null> {
+  //   return this.prisma.transaksi.findUnique({
+  //     where: { id_transaksi: Number(id_transaksi) },
+  //     include: {
+  //       user: true,
+  //       barang_transaksi: {
+  //         include: {
+  //           barang: true,
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
 
       async createTransaction(userId: number, barangTransaksi: BarangTransaksiDto[]) {
       let totalHarga = 0;
@@ -85,6 +85,7 @@ export class TransaksiService {
       return transaksi;
     }
 
+  // delete transaksi
   async deleteTransaksi(id_transaksi: number): Promise<transaksi> {
     await this.prisma.barang_transaksi.deleteMany({
         where: { id_transaksi: Number(id_transaksi) },
@@ -93,4 +94,16 @@ export class TransaksiService {
         where: { id_transaksi: Number(id_transaksi) },
       });
     }
+
+  // get total transaksi
+  async getTotalTransactionValue(): Promise<number> {
+    const allTransactions = await this.getAllTransaksi(); 
+    let totalValue = 0;
+
+    allTransactions.forEach((transaction) => {
+      totalValue += transaction.totalHarga;
+    });
+
+    return totalValue;
+  }
 }

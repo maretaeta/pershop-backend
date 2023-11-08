@@ -26,25 +26,25 @@ import { CreateTransaksiDto } from '../auth/dto/transaksi.dto';
     return this.transaksiService.getAllTransaksi();
   }
 
-    @Get(':id_transaksi')
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @SetMetadata('roles', [UserRole.ADMIN])
-    @ApiParam({
-        name: 'id_transaksi',
-        type: 'integer',
-        required: true
-    })
-    @ApiResponse({
-        status: 200,
-        description: 'Data Transaksi By ID'
-    })
-    @ApiResponse({
-        status: 500,
-        description: 'Internal server error'
-    })
-    async getTransaksi(@Param('id_transaksi') id_transaksi: number): Promise<transaksi | null> {
-        return this.transaksiService.getTransaksi(id_transaksi);
-    }
+    // @Get(':id_transaksi')
+    // @UseGuards(JwtAuthGuard, RolesGuard)
+    // @SetMetadata('roles', [UserRole.ADMIN])
+    // @ApiParam({
+    //     name: 'id_transaksi',
+    //     type: 'integer',
+    //     required: true
+    // })
+    // @ApiResponse({
+    //     status: 200,
+    //     description: 'Data Transaksi By ID'
+    // })
+    // @ApiResponse({
+    //     status: 500,
+    //     description: 'Internal server error'
+    // })
+    // async getTransaksi(@Param('id_transaksi') id_transaksi: number): Promise<transaksi | null> {
+    //     return this.transaksiService.getTransaksi(id_transaksi);
+    // }
 
     @Post('create')
     @UseGuards(JwtAuthGuard)
@@ -84,5 +84,12 @@ import { CreateTransaksiDto } from '../auth/dto/transaksi.dto';
         await this.transaksiService.deleteTransaksi(id_transaksi);
         return "Transaksi deleted";
     }
+
+    // total pendapatan
+    @Get('total-value')
+    async getTotalTransactionValue(): Promise<{total: number}> {
+        const total = await this.transaksiService.getTotalTransactionValue()
+        return{total}
     }
+}
 

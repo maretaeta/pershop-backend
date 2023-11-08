@@ -68,25 +68,25 @@ export class BarangController{
 
 
 
-    @Get(':id_barang')
-    @UseGuards(JwtAuthGuard)
-    @ApiParam({
-        name: 'id_barang',
-        type: 'integer',
-        required: true
-    })
-    @ApiResponse({
-        status: 200,
-        description:'Data Barang By ID'
-    })
+    // @Get(':id_barang')
+    // @UseGuards(JwtAuthGuard)
+    // @ApiParam({
+    //     name: 'id_barang',
+    //     type: 'integer',
+    //     required: true
+    // })
+    // @ApiResponse({
+    //     status: 200,
+    //     description:'Data Barang By ID'
+    // })
 
-    @ApiResponse({
-        status: 500,
-        description:'Internal server error'
-    })
-    async getBarang(@Param('id_barang') id_barang:number):Promise<barang | null>{
-        return this.barangService.getBarang(id_barang)
-    }
+    // @ApiResponse({
+    //     status: 500,
+    //     description:'Internal server error'
+    // })
+    // async getBarang(@Param('id_barang') id_barang:number):Promise<barang | null>{
+    //     return this.barangService.getBarang(id_barang)
+    // }
 
 
 
@@ -155,6 +155,23 @@ export class BarangController{
     async updateBarang(@Param('id_barang') id_barang:number,@Body() postBarang: barang):Promise<barang>{
         return this.barangService.updateBarang(id_barang, postBarang)
     }
+
+    @Get('totalBarang')
+    @UseGuards(JwtAuthGuard)
+    @ApiResponse({
+        status: 200,
+        description:'All Data Stok Barang'
+    })
+
+    @ApiResponse({
+        status: 500,
+        description:'Internal server error'
+    })
+    async SumtotalBarang():Promise<{total: number}>{
+        const total = await this.barangService.totalBarang()
+        return {total}
+    }
+
 
 }
 

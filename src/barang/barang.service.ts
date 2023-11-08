@@ -10,10 +10,10 @@ export class barangService {
         return this.prisma.barang.findMany();
     }
 
-    async getBarang(id_barang:number):Promise<barang | null>{
-        return this.prisma.barang.findUnique({where: {id_barang:Number(id_barang)}})
+    // async getBarang(id_barang:number):Promise<barang | null>{
+    //     return this.prisma.barang.findUnique({where: {id_barang:Number(id_barang)}})
         
-    }
+    // }
 
     async createBarang(data: barang): Promise<barang>{
         return this.prisma.barang.create({
@@ -36,15 +36,23 @@ export class barangService {
     }
 
 
-  async deleteBarang(id_barang: number): Promise<barang> {
-    await this.prisma.barang_transaksi.deleteMany({
-        where: { id_barang: Number(id_barang) },
-    });
+    async deleteBarang(id_barang: number): Promise<barang> {
+        await this.prisma.barang_transaksi.deleteMany({
+            where: { id_barang: Number(id_barang) },
+        });
 
-    return this.prisma.barang.delete({
-        where: { id_barang: Number(id_barang) },
-    });
-}
+        return this.prisma.barang.delete({
+            where: { id_barang: Number(id_barang) },
+        });
+    }
+
+    async totalBarang(): Promise<number>{
+        const totalStock = await this.prisma.barang.aggregate({
+            _sum: {stok_barang: true}
+        })
+
+        return totalStock._sum.stok_barang || 0
+    }
 
 }
 
