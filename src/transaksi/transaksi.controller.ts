@@ -13,7 +13,7 @@ import { CreateTransaksiDto } from '../auth/dto/transaksi.dto';
 
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @SetMetadata('roles', [UserRole.ADMIN])
+  @SetMetadata('roles', [UserRole.ADMIN, UserRole.KASIR])
   @ApiResponse({
     status: 200,
     description: 'All Data Transaksi'
@@ -26,28 +26,9 @@ import { CreateTransaksiDto } from '../auth/dto/transaksi.dto';
     return this.transaksiService.getAllTransaksi();
   }
 
-    // @Get(':id_transaksi')
-    // @UseGuards(JwtAuthGuard, RolesGuard)
-    // @SetMetadata('roles', [UserRole.ADMIN])
-    // @ApiParam({
-    //     name: 'id_transaksi',
-    //     type: 'integer',
-    //     required: true
-    // })
-    // @ApiResponse({
-    //     status: 200,
-    //     description: 'Data Transaksi By ID'
-    // })
-    // @ApiResponse({
-    //     status: 500,
-    //     description: 'Internal server error'
-    // })
-    // async getTransaksi(@Param('id_transaksi') id_transaksi: number): Promise<transaksi | null> {
-    //     return this.transaksiService.getTransaksi(id_transaksi);
-    // }
-
     @Post('create')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @SetMetadata('roles', [UserRole.KASIR])
     @ApiBody({ type: CreateTransaksiDto }) 
     @ApiResponse({
         status: 200,
@@ -64,9 +45,9 @@ import { CreateTransaksiDto } from '../auth/dto/transaksi.dto';
     }
 
 
-
     @Delete(':id_transaksi')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @SetMetadata('roles', [UserRole.ADMIN])
     @ApiParam({
         name: 'id_transaksi',
         type: 'integer',

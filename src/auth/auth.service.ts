@@ -45,15 +45,7 @@ export class AuthService {
         };
     }
 
-    async register(createDto: RegisterUserDto): Promise<any> {
-
-        //  const { role, ...userDto } = createDto;
-
-        // if (![UserRole.ADMIN, UserRole.KASIR].includes(role)) {
-        //     throw new NotFoundException('Invalid role');
-        // }
-
-        
+    async register(createDto: RegisterUserDto): Promise<any> {        
         const userDto = { ...createDto, role: UserRole.KASIR };
 
         const createUsers = new Users();

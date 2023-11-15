@@ -14,7 +14,8 @@ export class BarangController{
     constructor(private readonly barangService: barangService){}
 
     @Get()
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @SetMetadata('roles', [UserRole.ADMIN, UserRole.KASIR])
     @ApiResponse({
         status: 200,
         description:'All data Barang'
@@ -32,7 +33,7 @@ export class BarangController{
 
     @Post('create')
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @SetMetadata('roles', [UserRole.ADMIN])
+    @SetMetadata('roles', [UserRole.ADMIN, UserRole.KASIR])
     @ApiBody({
         schema: {
             type: 'object',
@@ -66,31 +67,6 @@ export class BarangController{
     }
 
 
-
-
-    // @Get(':id_barang')
-    // @UseGuards(JwtAuthGuard)
-    // @ApiParam({
-    //     name: 'id_barang',
-    //     type: 'integer',
-    //     required: true
-    // })
-    // @ApiResponse({
-    //     status: 200,
-    //     description:'Data Barang By ID'
-    // })
-
-    // @ApiResponse({
-    //     status: 500,
-    //     description:'Internal server error'
-    // })
-    // async getBarang(@Param('id_barang') id_barang:number):Promise<barang | null>{
-    //     return this.barangService.getBarang(id_barang)
-    // }
-
-
-
-
     @Delete(':id_barang')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @SetMetadata('roles', [UserRole.ADMIN])
@@ -118,7 +94,7 @@ export class BarangController{
 
     @Put(':id_barang')
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @SetMetadata('roles', [UserRole.ADMIN])
+    @SetMetadata('roles', [UserRole.ADMIN, UserRole.KASIR])
     @ApiParam({
         name: 'id_barang',
         type: 'integer',

@@ -17,7 +17,6 @@ export class UserController{
     @UseGuards(JwtAuthGuard, RolesGuard)
     @SetMetadata('roles', [UserRole.ADMIN]) 
 
-    // @ApiOperation({summary: 'Get all data users'})
     @ApiResponse({
         status: 200,
         description:'All data Users'
