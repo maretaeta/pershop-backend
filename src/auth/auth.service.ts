@@ -19,11 +19,11 @@ export class AuthService {
     async login(loginDto: loginDto):Promise<any>{
         const {username, password} = loginDto;
 
-    const users = await this.prismaService.users.findFirst({
-        where: {
-            username: { equals: username }
-        }
-    });
+        const users = await this.prismaService.users.findFirst({
+            where: {
+                username: { equals: username }
+            }
+        });
 
 
         if (!users) {

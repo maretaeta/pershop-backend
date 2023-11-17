@@ -31,12 +31,13 @@ enum UserRole {
 }
 
 model users {
-  id_users  Int         @id @default(autoincrement())
-  nama      String?     @db.VarChar(225)
-  username  String?     @db.VarChar(225)
-  password  String?
-  role      UserRole
-  transaksi transaksi[]
+  id_users     Int         @id @default(autoincrement())
+  nama         String?     @db.VarChar(225)
+  username     String?     @db.VarChar(225)
+  password     String?
+  profileImage String?
+  role         UserRole
+  transaksi    transaksi[]
 }
 
 model barang_transaksi {

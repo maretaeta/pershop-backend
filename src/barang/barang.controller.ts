@@ -90,8 +90,6 @@ export class BarangController{
     }
 
 
-
-
     @Put(':id_barang')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @SetMetadata('roles', [UserRole.ADMIN, UserRole.KASIR])
