@@ -51,40 +51,43 @@ export class UserController{
         }
     }
 
-    @Put(':userId')
+    @Put('updateProfile/:id_users')
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @SetMetadata('roles', [UserRole.ADMIN])
-    @ApiResponse({
-        status: 200,
-        description: 'Update user data',
-    })
-    @ApiResponse({
-        status: 403,
-        description: 'Forbidden',
-    })
-    @ApiResponse({
-        status: 500,
-        description: 'Internal server error',
-    })
+    @SetMetadata('roles', [UserRole.ADMIN, UserRole.KASIR])
+    @ApiResponse({ status: 200, description: 'Update user data' })
+    @ApiResponse({ status: 403, description: 'Forbidden' })
+    @ApiResponse({ status: 500, description: 'Internal server error' })
     @UsePipes(new ValidationPipe({ transform: true }))
-    async updateUser(@Param('userId') userId: number, @Body() data: Partial<Users>): Promise<any> {
-        try {
-            const updatedUser = await this.usersService.updateUser(userId, data);
+    
+    async updateUser(
+    @Param('id_users') id_users: number, 
+    @Body() data: Partial<Users>,
+): Promise<any> {
+    try {
+        const updatedUser = await this.usersService.updateUser(id_users, data);
+        if (updatedUser) {
             return {
                 status: 'Okay',
                 message: 'User data updated successfully',
                 data: updatedUser,
             };
-        } catch (error) {
+        } else {
             return {
                 status: 'Error',
-                message: 'Internal Server Error',
-                error: error.message,
+                message: 'User not found',
             };
         }
+    } catch (error) {
+        return {
+            status: 'Error',
+            message: error.message || 'Internal Server Error',
+        };
     }
+}
 
-    @Post(':userId/profile-image')
+
+
+    @Post('profile-image/:id_users')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @SetMetadata('roles', [UserRole.ADMIN])
     @ApiResponse({
